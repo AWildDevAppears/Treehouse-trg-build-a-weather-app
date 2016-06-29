@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -15,8 +16,8 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     private static final String API_KEY = "8088206ec0e9762b47d101ba8ccc6124";
     private static final String TAG = MainActivity.class.getSimpleName();
-    private String lati = "37.8267";
-    private String longi = "-122.423";
+    private double lati = 37.8267;
+    private double longi = -122.423;
 
     private OkHttpClient client;
 
@@ -34,16 +35,27 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
-        try {
-            Response response = call.execute();
-
-            if (response.isSuccessful()) {
-                Log.v(TAG, response.body().string());
             }
-        } catch (IOException e) {
-            Log.e(TAG, e);
-        }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                    }
+                } catch (IOException e) {
+                    alertUserOfError();
+                }
+            }
+        });
+    }
+
+    private void alertUserOfError() {
+        AlertDialogFragment dialog = new AlertDialogFragment();
+
+        dialog.show(getFragmentManager(), "error_dialog");
     }
 }
