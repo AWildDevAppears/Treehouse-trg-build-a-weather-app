@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -23,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private double lati = 37.8267;
     private double longi = -122.423;
     private String forecastURL = "https://api.forecast.io/forecast/" + API_KEY + "/" + lati + "," + longi;
+
+    private CurrentWeather mCurrentWeather;
 
 
     private OkHttpClient client;
@@ -49,12 +54,15 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     try {
-                        Log.v(TAG, response.body().string());
+                        String jsonData = response.body().string();
+
+                        Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
+                            mCurrentWeather = getCurrentDetails(jsonData);
                         } else {
                             alertUserOfError();
                         }
-                    } catch (IOException e) {
+                    } catch (IOException | JSONException e) {
                         Log.e(TAG, "Error: ", e);
                     }
                 }
@@ -62,6 +70,14 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, getString(R.string.network_unavailable_text), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
+        JSONObject forecast = new JSONObject(jsonData);
+
+        String timezone = forecast.getString("timezone");
+
+        return new CurrentWeather();
     }
 
     private boolean isNetworkAvaiable() {
