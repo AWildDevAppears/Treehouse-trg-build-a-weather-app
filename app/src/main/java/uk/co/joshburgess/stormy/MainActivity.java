@@ -77,7 +77,17 @@ public class MainActivity extends AppCompatActivity {
 
         String timezone = forecast.getString("timezone");
 
-        return new CurrentWeather();
+        JSONObject currently = forecast.getJSONObject("currently");
+
+        CurrentWeather currentWeather = new CurrentWeather();
+
+        currentWeather.setHumidity(currently.getDouble("humidity"));
+        currentWeather.setTime(currently.getLong("time"));
+        currentWeather.setIcon(currently.getString("icon"));
+        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
+        currentWeather.setTemp(currently.getDouble("temperature"));
+        currentWeather.setSummary(currently.getString("summary"));
+        return currentWeather;
     }
 
     private boolean isNetworkAvaiable() {
