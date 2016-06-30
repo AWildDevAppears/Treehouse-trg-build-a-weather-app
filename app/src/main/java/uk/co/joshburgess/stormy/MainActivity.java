@@ -2,6 +2,7 @@ package uk.co.joshburgess.stormy;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -94,11 +95,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateDisplay() {
+        Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconId());
+
         mTemperatureLabel.setText(mCurrentWeather.getTemp() + "");
         mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
         mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
         mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
         mSummaryLabel.setText(mCurrentWeather.getSummary());
+
+        mIconImageView.setImageDrawable(drawable);
 
     }
 
