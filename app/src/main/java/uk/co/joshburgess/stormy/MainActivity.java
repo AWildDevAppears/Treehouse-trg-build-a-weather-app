@@ -8,7 +8,9 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.precipValue) TextView mPrecipValue;
     @BindView(R.id.summaryValue) TextView mSummaryLabel;
     @BindView(R.id.weatherIcon) ImageView mIconImageView;
+    @BindView(R.id.refreshButton) ImageView mRefreshImageView;
+
+    @BindView(R.id.refresher) ProgressBar mProgressBar;
 
 
     private OkHttpClient client;
@@ -51,7 +56,22 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        mProgressBar.setVisibility(View.INVISIBLE);
+
+        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getForecast();
+            }
+        });
+
+        getForecast();
+    }
+
+    private void getForecast() {
         if (isNetworkAvaiable()) {
+            toggleRefresh();
+
             client = new OkHttpClient();
 
             Request request = new Request.Builder()
@@ -62,12 +82,25 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     try {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                toggleRefresh();
+                                alertUserOfError();
+                            }
+                        });
+
                         String jsonData = response.body().string();
 
                         Log.v(TAG, jsonData);
@@ -92,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, getString(R.string.network_unavailable_text), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void toggleRefresh() {
+        mProgressBar.setVisibility(mProgressBar.getVisibility() == View.INVISIBLE? View.VISIBLE : View.INVISIBLE);
+        mRefreshImageView.setVisibility(mProgressBar.getVisibility() == View.INVISIBLE? View.INVISIBLE : View.VISIBLE);
     }
 
     private void updateDisplay() {
