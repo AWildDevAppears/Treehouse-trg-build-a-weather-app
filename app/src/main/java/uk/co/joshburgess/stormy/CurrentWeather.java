@@ -1,5 +1,9 @@
 package uk.co.joshburgess.stormy;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 /**
  * Created by joshburgess on 29/06/2016.
  */
@@ -10,6 +14,7 @@ public class CurrentWeather {
     private double mHumidity;
     private double mPrecipChance;
     private String mSummary;
+    private String mTimeZone;
 
     public String getIcon() {
         return mIcon;
@@ -29,6 +34,18 @@ public class CurrentWeather {
 
     public double getTemp() {
         return mTemp;
+    }
+
+
+    public String getFormattedTime() {
+        SimpleDateFormat formatter = new SimpleDateFormat("h:mm a");
+        Date dateTime;
+
+        formatter.setTimeZone(TimeZone.getTimeZone(getTimeZone()));
+
+        dateTime = new Date(getTime() * 1000);
+
+        return formatter.format(dateTime);
     }
 
     public void setTemp(double temp) {
@@ -57,5 +74,13 @@ public class CurrentWeather {
 
     public void setSummary(String summary) {
         this.mSummary = summary;
+    }
+
+    public String getTimeZone() {
+        return mTimeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        mTimeZone = timeZone;
     }
 }

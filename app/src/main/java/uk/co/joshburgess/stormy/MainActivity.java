@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
         currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
         currentWeather.setTemp(currently.getDouble("temperature"));
         currentWeather.setSummary(currently.getString("summary"));
+
+        currentWeather.setTimeZone(timezone);
+
         return currentWeather;
     }
 
