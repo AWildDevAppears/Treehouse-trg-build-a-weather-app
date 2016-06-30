@@ -4,4 +4,5 @@
     <string name="error_message">There was an error, please try again</string>
     <string name="error_ok_button_text">OK</string>
     <string name="network_unavailable_text">Couldn\'t establish a network connection, please check you are connected to the internet.</string>
+    <string name="weather_icon_desc">Weather icon</string>
 </resources>
