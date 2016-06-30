@@ -56,9 +56,10 @@
         android:layout_toRightOf="@+id/tempDegrees"
         android:layout_toEndOf="@+id/tempDegrees"
         android:layout_marginTop="50dp"
-        android:contentDescription="Temperature" />
+        android:contentDescription="Temperature"
+        android:id="@+id/imageView"/>
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/lowerBlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -104,6 +105,13 @@
                       android:textColor="#80FFFFFF"
                       android:textSize="24sp" />
         </LinearLayout>
-
     </LinearLayout>
+
+    <TextView android:id="@+id/summaryValue"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:layout_below="@+id/lowerBlock"
+              android:layout_marginTop="60dp"
+              tools:text="Placeholder"/>
 </RelativeLayout>

@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -14,6 +16,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.BindView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -29,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
 
     private CurrentWeather mCurrentWeather;
 
+    @BindView(R.id.timeText) TextView mTimeLabel;
+    @BindView(R.id.tempDegrees) TextView mTemperatureLabel;
+    @BindView(R.id.humidtyValue) TextView mHumidityValue;
+    @BindView(R.id.precipValue) TextView mPrecipValue;
+    @BindView(R.id.summaryValue) TextView mSummaryLabel;
+    @BindView(R.id.weatherIcon) ImageView mIconImageView;
+
 
     private OkHttpClient client;
 
@@ -36,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         if (isNetworkAvaiable()) {
             client = new OkHttpClient();
